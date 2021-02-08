@@ -5,7 +5,7 @@ using System.Text;
 namespace EnglishBot
 
 {
-    public class AskMeCommand : AbstractCommand, IChatTextCommand
+    public class AskMeCommand : AbstractCommand, IChatTextResponse
     {
         public AskMeCommand()
         {

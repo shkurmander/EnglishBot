@@ -2,7 +2,7 @@
 
 namespace EnglishBot
 {
-    interface IKeyBoardCommand
+    interface IKeyboardResponse
     {
         InlineKeyboardMarkup ReturnKeyBoard();
 

@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EnglishBot
 {
-    public interface IChatCommand
+    public interface IChatResponse
     {
         bool CheckMessage(string message);
     }

@@ -7,14 +7,14 @@ namespace EnglishBot
 {
     public class CommandParser
     {
-        private List<IChatCommand> Command;
+        private List<IChatResponse> Command;
 
         public CommandParser()
         {
-            Command = new List<IChatCommand>();
+            Command = new List<IChatResponse>();
         }
 
-        public void AddCommand(IChatCommand chatCommand)
+        public void AddCommand(IChatResponse chatCommand)
         {
             Command.Add(chatCommand);
         }
@@ -28,40 +28,40 @@ namespace EnglishBot
         {
             var command = Command.Find(x => x.CheckMessage(message));
 
-            return command is IChatTextCommand;
+            return command is IChatTextResponse;
         }
 
         public bool IsButtonCommand(string message)
         {
             var command = Command.Find(x => x.CheckMessage(message));
 
-            return command is IKeyBoardCommand;
+            return command is IKeyboardResponse;
         }
 
         public string GetMessageText(string message)
         {
-            var command = Command.Find(x => x.CheckMessage(message)) as IChatTextCommand;
+            var command = Command.Find(x => x.CheckMessage(message)) as IChatTextResponse;
 
             return command.ReturnText();
         }
 
         public string GetInformationalMeggase(string message)
         {
-            var command = Command.Find(x => x.CheckMessage(message)) as IKeyBoardCommand;
+            var command = Command.Find(x => x.CheckMessage(message)) as IKeyboardResponse;
 
             return command.InformationalMessage();
         }
 
         public InlineKeyboardMarkup GetKeyBoard(string message)
         {
-            var command = Command.Find(x => x.CheckMessage(message)) as IKeyBoardCommand;
+            var command = Command.Find(x => x.CheckMessage(message)) as IKeyboardResponse;
 
             return command.ReturnKeyBoard();
         }
 
         public void AddCallback(string message, long chatId)
         {
-            var command = Command.Find(x => x.CheckMessage(message)) as IKeyBoardCommand;
+            var command = Command.Find(x => x.CheckMessage(message)) as IKeyboardResponse;
             command.AddCallBack(chatId);
         }
     }

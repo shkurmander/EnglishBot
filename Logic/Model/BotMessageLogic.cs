@@ -13,17 +13,15 @@ namespace EnglishBot
         private Messenger messenger;
 
         private Dictionary<long, Conversation> chatList;
-
-        private ITelegramBotClient botClient;
+              
 
         public BotMessageLogic(ITelegramBotClient botClient)
-        {
-            this.botClient = botClient;
+        {            
             messenger = new Messenger(botClient);            
             chatList = new Dictionary<long, Conversation>();
             
         }
-        public async  Task Response(MessageEventArgs e)
+        public async Task Response(MessageEventArgs e)
         {
             var id = e.Message.Chat.Id;
             if (!chatList.ContainsKey(id))

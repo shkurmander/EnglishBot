@@ -7,7 +7,7 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace EnglishBot
 {
-    public class PoemButtonCommand : AbstractCommand, IKeyBoardCommand
+    public class PoemButtonCommand : AbstractCommand, IKeyboardResponse
     {
         ITelegramBotClient botClient;
 
