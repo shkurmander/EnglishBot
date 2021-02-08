@@ -14,7 +14,6 @@ namespace EnglishBot
         public PoemButtonCommand(ITelegramBotClient botClient)
         {
             this.botClient = botClient;
-
             CommandText = "/singme";
         }
 

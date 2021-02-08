@@ -41,7 +41,14 @@ namespace EnglishBot
                 await SendText(chat, text);
             }
         }
+        public async Task AddWordDialog(Conversation chat)
+        {
+           
+            //var text = CreateTextMessage();
 
+            await SendText(chat, "Введите слово");
+            
+        }
 
         public async Task ExecCommand(Conversation chat, string command)
         {

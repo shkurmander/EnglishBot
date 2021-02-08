@@ -43,6 +43,24 @@ namespace EnglishBot
 
         }
 
-       
+        private async Task AddWordDialog(MessageEventArgs e)
+        {
+            var id = e.Message.Chat.Id;
+            if (!chatList.ContainsKey(id))
+            {
+                var newchat = new Conversation(e.Message.Chat);
+                chatList.Add(id, newchat);
+            }
+
+            var chat = chatList[id];
+            chat.AddMessage(e.Message);
+
+            await SendMessage(chat);
+
+            //await messenger.MakeAnswer(chat);
+
+        }
+
+
     }
 }
