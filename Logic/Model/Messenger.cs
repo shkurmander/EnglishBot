@@ -122,7 +122,6 @@ namespace EnglishBot
                 parser.AddCallback(command, chat.GetId());
 
                 await SendTextWithKeyBoard(chat, text, keys);
-
             }
         }
         /// <summary>
