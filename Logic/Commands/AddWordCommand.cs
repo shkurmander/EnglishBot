@@ -4,21 +4,16 @@ using System.Text;
 
 namespace EnglishBot
 {
-    public class AddWordCommand : AbstractCommand, IChatTextResponse, IChatTextDialog
+    public class AddWordCommand : AbstractCommand, IChatTextResponse
     {
         public AddWordCommand()
         {
             CommandText = "/addword";
         }
-
-        public string AddData(string text)
-        {
-            return text;
-        }
-
+      
         public string ReturnText()
         {
-            return "Ю ноу, блин?";
+            return "Добавление нового слова в словарь...";
         }
 
     }

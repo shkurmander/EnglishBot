@@ -6,10 +6,13 @@ namespace EnglishBot
 {
     public class WordRecord
     {
-        private string Word { get; }
-        private string Translation { get; }
-        private string Category { get; }
+        internal string Word { get; set; }
+        internal string Translation { get; set; }
+        internal string Category { get; set; }
+        public WordRecord()
+        {
 
+        }
         public WordRecord(string word, string translation, string category)
         {
             Word = word;

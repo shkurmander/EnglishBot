@@ -10,15 +10,19 @@ namespace EnglishBot
         private Chat telegramChat;
 
         private List<Message> telegramMessages;
+        private AddwordDialog addwordDialog;
+        private List<WordRecord> vocabulary;
+
 
         public Conversation(Chat chat)
         {
             telegramChat = chat;
             telegramMessages = new List<Message>();
-            
+            addwordDialog = new AddwordDialog();
+            vocabulary = new List<WordRecord>();            
         }
 
-        internal void AddMessage(Message message)
+        public void AddMessage(Message message)
         {
             telegramMessages.Add(message);
         }
@@ -41,5 +45,30 @@ namespace EnglishBot
 
             return textMessages;
         }
+        /// <summary>
+        /// метод создает новый диалог
+        /// </summary>
+        public void StartDialog() => addwordDialog.SetState("Active");
+        /// <summary>
+        /// метод удаляет диалог
+        /// </summary>     
+        public void StopDialog() => addwordDialog.SetState("Inactive");
+
+        /// <summary>
+        /// метод задает состояние диалога
+        /// </summary>
+        /// <param name="state"></param>
+        public void ChangeDialogState(string state) => addwordDialog.SetState(state);
+        /// <summary>
+        /// метод отдает состояние диалога
+        /// </summary>
+        /// <returns></returns>
+        public string GetDialogState() => addwordDialog.GetState();
+        /// <summary>
+        /// метод добавляет новую запись в словарь
+        /// </summary>
+        /// <param name="record"></param>
+        public void VocabularyAddRecord(WordRecord record) => vocabulary.Add(record);
+       
     }
 }
