@@ -139,8 +139,7 @@ namespace EnglishBot
                        "/sayhi  - приветствие\n" +
                        "/askme  - вопрос от бота\n" +
                        "/singme - спеть песню\n" +
-                       "/addword - добавить слово в словарь"; 
-                        
+                       "/addword - добавить слово в словарь";                        
 
             return text;
         }
