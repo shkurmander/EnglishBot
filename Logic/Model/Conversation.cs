@@ -11,7 +11,9 @@ namespace EnglishBot
 
         private List<Message> telegramMessages;
         private AddwordDialog addwordDialog;
-        private List<WordRecord> vocabulary;
+        
+        public List<WordRecord> vocabulary; //TODO сменить модификатор доступа
+        public List<WordRecord> tempVocabulary;
 
 
         public Conversation(Chat chat)
@@ -69,6 +71,34 @@ namespace EnglishBot
         /// </summary>
         /// <param name="record"></param>
         public void VocabularyAddRecord(WordRecord record) => vocabulary.Add(record);
-       
+        /// <summary>
+        /// метод пишет словарь в бинарный файл
+        /// </summary>
+        public void VocabularySaveToFile()
+        {            
+            var path = "user" + telegramChat.Id.ToString() + ".dat.";            
+            
+            DataSaver<List<WordRecord>>.BinaryDataSave(vocabulary, path);
+            
+        }
+        /// <summary>
+        /// Метод читает словарь из файла
+        /// </summary>
+        public void VocabularyReadFromFile()
+        {
+            var path = "user" + telegramChat.Id.ToString() + ".dat.";
+            var data = DataSaver<List<WordRecord>>.BinaryDataRead(path);
+            if (System.IO.File.Exists(path))
+            {
+                if (data != null)
+                    tempVocabulary = data;
+                else
+                    Console.WriteLine("Не удалось считать словарь!");
+            }
+            else
+                Console.WriteLine("Словарь еще не создан!");
+
+        }
+
     }
 }

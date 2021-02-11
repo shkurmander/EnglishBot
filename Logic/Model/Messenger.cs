@@ -47,6 +47,7 @@ namespace EnglishBot
                     if (lastmessage == "/addword")
                     {
                         tempWord = new WordRecord();
+                        //chat.VocabularyReadFromFile();
                         chat.StartDialog();
                         await ExecCommand(chat, lastmessage);
                         await AddWordDialog(chat, lastmessage);
@@ -97,8 +98,17 @@ namespace EnglishBot
                     tempWord.Category = message;
                     chat.VocabularyAddRecord(tempWord);
                     chat.StopDialog();
+                    chat.VocabularySaveToFile();
                     await SendText(chat, $"В словарь добавлена запись:\n{tempWord.Word}\nПеревод: {tempWord.Translation}" +
                         $"\nТематика: {tempWord.Category}");
+                    await SendText(chat, "Содержимое словаря:");
+                    chat.VocabularyReadFromFile();
+                    foreach (var item in chat.tempVocabulary)
+                    {
+                        await SendText(chat, CreateVocabularyRecordString(item));
+                    }
+                    
+
                     await SendText(chat, CreateTextMessage());
                     break;
                 
@@ -139,6 +149,14 @@ namespace EnglishBot
                        "/askme  - вопрос от бота\n" +
                        "/singme - спеть песню\n" +
                        "/addword - добавить слово в словарь";                        
+
+            return text;
+        }
+
+        private string CreateVocabularyRecordString(WordRecord data)
+        {
+            var text = $"В {data.Word}\nПеревод: {data.Translation}" +
+                        $"\nТематика: {data.Category}";
 
             return text;
         }

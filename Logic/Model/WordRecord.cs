@@ -4,6 +4,7 @@ using System.Text;
 
 namespace EnglishBot
 {
+    [Serializable]
     public class WordRecord
     {
         internal string Word { get; set; }
