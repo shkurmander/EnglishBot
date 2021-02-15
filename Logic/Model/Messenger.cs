@@ -12,23 +12,23 @@ namespace EnglishBot
         private CommandParser parser;
         private WordRecord tempWord;
 
-        public Messenger(ITelegramBotClient botClient)
+        public Messenger(ITelegramBotClient botClient, CommandParser commandParser)
         {
             this.botClient = botClient;
-            parser = new CommandParser();           
-            
+            //parser = new CommandParser();           
+            parser = commandParser;
 
-            RegisterCommands();
-            
+            //RegisterCommands();
+
         }
 
-        private void RegisterCommands()
-        {
-            parser.AddCommand(new SayHiCommand());
-            parser.AddCommand(new AskMeCommand());
-            parser.AddCommand(new TrainingButtonCommand(botClient));
-            parser.AddCommand(new AddWordCommand());
-        }
+        //private void RegisterCommands()
+        //{
+        //    parser.AddCommand(new SayHiCommand());
+        //    parser.AddCommand(new AskMeCommand());
+        //    parser.AddCommand(new TrainingButtonCommand(botClient,));
+        //    parser.AddCommand(new AddWordCommand());
+        //}
 
         public async Task MakeAnswer(Conversation chat)
         {

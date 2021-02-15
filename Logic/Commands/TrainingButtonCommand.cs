@@ -10,10 +10,12 @@ namespace EnglishBot
     public class TrainingButtonCommand : AbstractCommand, IKeyboardResponse
     {
         ITelegramBotClient botClient;
+        Messenger messenger;
 
-        public TrainingButtonCommand(ITelegramBotClient botClient)
+        public TrainingButtonCommand(ITelegramBotClient botClient, Messenger msngr)
         {
             this.botClient = botClient;
+            messenger = msngr;
             CommandText = "/training";
         }
 
@@ -27,8 +29,10 @@ namespace EnglishBot
         {
             var text = "";
 
+            
             switch (e.CallbackQuery.Data)
             {
+                
                 case "Начать тренировку":
                     text = @"На белой лестнице встретился один,
                                 На чёрной лестнице повстречал другого…

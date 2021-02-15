@@ -11,16 +11,29 @@ namespace EnglishBot
     public class BotMessageLogic
     {
         private Messenger messenger;
+        private CommandParser parser;
+        private ITelegramBotClient botClient;
 
         private Dictionary<long, Conversation> chatList;
               
 
         public BotMessageLogic(ITelegramBotClient botClient)
-        {            
-            messenger = new Messenger(botClient);            
-            chatList = new Dictionary<long, Conversation>();
-            
+        {
+            this.botClient = botClient;
+            parser = new CommandParser();
+            RegisterCommands();
+            messenger = new Messenger(botClient, parser);            
+            chatList = new Dictionary<long, Conversation>();            
+
         }
+        private void RegisterCommands()
+        {
+            parser.AddCommand(new SayHiCommand());
+            parser.AddCommand(new AskMeCommand());
+            parser.AddCommand(new TrainingButtonCommand(this.botClient,this.messenger));
+            parser.AddCommand(new AddWordCommand());
+        }
+
         public async Task Response(MessageEventArgs e)
         {
             var id = e.Message.Chat.Id;
