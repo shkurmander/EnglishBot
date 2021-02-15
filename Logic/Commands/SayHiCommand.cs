@@ -12,7 +12,7 @@ namespace EnglishBot
         }
 
         public string ReturnText()
-        {
+        {            
             return "Здарова, отец!";
         }
 

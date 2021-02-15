@@ -7,14 +7,14 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace EnglishBot
 {
-    public class PoemButtonCommand : AbstractCommand, IKeyboardResponse
+    public class TrainingButtonCommand : AbstractCommand, IKeyboardResponse
     {
         ITelegramBotClient botClient;
 
-        public PoemButtonCommand(ITelegramBotClient botClient)
+        public TrainingButtonCommand(ITelegramBotClient botClient)
         {
             this.botClient = botClient;
-            CommandText = "/singme";
+            CommandText = "/training";
         }
 
         public void AddCallBack(long ChatId)
@@ -29,7 +29,7 @@ namespace EnglishBot
 
             switch (e.CallbackQuery.Data)
             {
-                case "Сон купца":
+                case "Начать тренировку":
                     text = @"На белой лестнице встретился один,
                                 На чёрной лестнице повстречал другого…
                                 Белое, чёрное, красное, зелёное –
@@ -40,7 +40,7 @@ namespace EnglishBot
                                 Сон купца, сон купца
                                 Никуда не денется, ца-ца.";
                     break;
-                case "Ничего":
+                case "Запланировать тренировку":
                     text = @"Больше никогда,
                             Не будет ничего
                             Нихрена!
@@ -63,14 +63,14 @@ namespace EnglishBot
             {
                 new InlineKeyboardButton
                 {
-                    Text = "Сон купца",
-                    CallbackData = "Сон купца"
+                    Text = "Начать тренировку",
+                    CallbackData = "Начать тренировку"
                 },
 
                 new InlineKeyboardButton
                 {
-                    Text = "Ничего, нихрена",
-                    CallbackData = "Ничего"
+                    Text = "Запланировать тренировку",
+                    CallbackData = "Запланировать тренировку"
                 }
             };
 
@@ -81,7 +81,7 @@ namespace EnglishBot
 
         public string InformationalMessage()
         {
-            return "Выберите песню";
+            return "Что вы хотите сделать?";
         }
     }
 }

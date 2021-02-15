@@ -26,7 +26,7 @@ namespace EnglishBot
         {
             parser.AddCommand(new SayHiCommand());
             parser.AddCommand(new AskMeCommand());
-            parser.AddCommand(new PoemButtonCommand(botClient));
+            parser.AddCommand(new TrainingButtonCommand(botClient));
             parser.AddCommand(new AddWordCommand());
         }
 
@@ -102,11 +102,16 @@ namespace EnglishBot
                     await SendText(chat, $"В словарь добавлена запись:\n{tempWord.Word}\nПеревод: {tempWord.Translation}" +
                         $"\nТематика: {tempWord.Category}");
                     await SendText(chat, "Содержимое словаря:");
+                    
                     chat.VocabularyReadFromFile();
-                    foreach (var item in chat.tempVocabulary)
+                    if (chat.tempVocabulary != null)
                     {
-                        await SendText(chat, CreateVocabularyRecordString(item));
+                        foreach (var item in chat.tempVocabulary)
+                        {
+                            await SendText(chat, CreateVocabularyRecordString(item));
+                        }
                     }
+                    
                     
 
                     await SendText(chat, CreateTextMessage());
@@ -142,17 +147,22 @@ namespace EnglishBot
         {
             await SendText(chat, CreateTextMessage());
         }
+
         private string CreateTextMessage()
         {
             var text = "Команды бота:\n" +
                        "/sayhi  - приветствие\n" +
                        "/askme  - вопрос от бота\n" +
-                       "/singme - спеть песню\n" +
+                       "/training - спеть песню\n" +
                        "/addword - добавить слово в словарь";                        
 
             return text;
         }
-
+        /// <summary>
+        /// формирует строку из WordRecord
+        /// </summary>
+        /// <param name="data"></param>
+        /// <returns></returns>
         private string CreateVocabularyRecordString(WordRecord data)
         {
             var text = $"В {data.Word}\nПеревод: {data.Translation}" +

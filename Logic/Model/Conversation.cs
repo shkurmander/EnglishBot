@@ -10,7 +10,7 @@ namespace EnglishBot
         private Chat telegramChat;
 
         private List<Message> telegramMessages;
-        private AddwordDialog addwordDialog;
+        private StateMachine stateMachine;
         
         public List<WordRecord> vocabulary; //TODO сменить модификатор доступа
         public List<WordRecord> tempVocabulary;
@@ -20,7 +20,7 @@ namespace EnglishBot
         {
             telegramChat = chat;
             telegramMessages = new List<Message>();
-            addwordDialog = new AddwordDialog();
+            stateMachine = new StateMachine();
             vocabulary = new List<WordRecord>();            
         }
 
@@ -50,22 +50,22 @@ namespace EnglishBot
         /// <summary>
         /// метод создает новый диалог
         /// </summary>
-        public void StartDialog() => addwordDialog.SetState("Active");
+        public void StartDialog() => stateMachine.SetState("Active");
         /// <summary>
         /// метод удаляет диалог
         /// </summary>     
-        public void StopDialog() => addwordDialog.SetState("Inactive");
+        public void StopDialog() => stateMachine.SetState("Inactive");
 
         /// <summary>
         /// метод задает состояние диалога
         /// </summary>
         /// <param name="state"></param>
-        public void ChangeDialogState(string state) => addwordDialog.SetState(state);
+        public void ChangeDialogState(string state) => stateMachine.SetState(state);
         /// <summary>
         /// метод отдает состояние диалога
         /// </summary>
         /// <returns></returns>
-        public string GetDialogState() => addwordDialog.GetState();
+        public string GetDialogState() => stateMachine.GetState();
         /// <summary>
         /// метод добавляет новую запись в словарь
         /// </summary>

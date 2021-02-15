@@ -4,7 +4,7 @@ using System.Text;
 
 namespace EnglishBot
 {
-    public class AddwordDialog
+    public class StateMachine
     {
         public enum State {Active, Inactive, EnglishWord, Translation, Category }
 
@@ -43,7 +43,7 @@ namespace EnglishBot
             //        break;
             //}
         }
-        public AddwordDialog()
+        public StateMachine()
         {
             currentState = State.Inactive;
         }
