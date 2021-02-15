@@ -6,15 +6,20 @@ namespace EnglishBot
 {
     public class AddWordCommand : AbstractCommand, IChatTextResponse
     {
-        public AddWordCommand()
+        private Conversation chat;
+        public AddWordCommand(Conversation conversation)
         {
             CommandText = "/addword";
+            chat = conversation;
         }
       
         public string ReturnText()
         {
+            
             return "Добавление нового слова в словарь...";
         }
+
+       
 
     }
 }

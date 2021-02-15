@@ -121,6 +121,51 @@ namespace EnglishBot
            
         }
 
+        public async Task TrainingDialog(Conversation chat, string message)
+        {
+            switch (chat.GetDialogState())
+            {
+                case "Active":
+                    chat.ChangeDialogState("EnglishWord");
+                    await SendText(chat, "Введите слово на английском:");
+                    break;
+                case "EnglishWord":
+                    tempWord.Word = message;
+                    chat.ChangeDialogState("Translation");
+                    await SendText(chat, "Введите перевод слова:");
+                    break;
+                case "Translation":
+                    tempWord.Translation = message;
+                    chat.ChangeDialogState("Category");
+                    await SendText(chat, "Введите категорию(тематику) слова:");
+                    break;
+                case "Category":
+                    tempWord.Category = message;
+                    chat.VocabularyAddRecord(tempWord);
+                    chat.StopDialog();
+                    chat.VocabularySaveToFile();
+                    await SendText(chat, $"В словарь добавлена запись:\n{tempWord.Word}\nПеревод: {tempWord.Translation}" +
+                        $"\nТематика: {tempWord.Category}");
+                    await SendText(chat, "Содержимое словаря:");
+
+                    chat.VocabularyReadFromFile();
+                    if (chat.tempVocabulary != null)
+                    {
+                        foreach (var item in chat.tempVocabulary)
+                        {
+                            await SendText(chat, CreateVocabularyRecordString(item));
+                        }
+                    }
+
+
+
+                    await SendText(chat, CreateTextMessage());
+                    break;
+
+            }
+
+        }
+
         public async Task ExecCommand(Conversation chat, string command)
         {
             if (parser.IsTextCommand(command))
