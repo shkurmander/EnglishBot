@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Runtime.Serialization.Formatters.Binary;
 using System.Text;
+using System.Linq;
 
 namespace EnglishBot
 {
@@ -29,9 +30,23 @@ namespace EnglishBot
             }
 
         }
-        public static void BinaryDataSave(T data, string path)
+        public static void BinaryDataSave(List<WordRecord> data, string path) 
         {
             BinaryFormatter formatter = new BinaryFormatter();
+
+            var oldData = DataSaver<List<WordRecord>>.BinaryDataRead(path);
+
+            List<WordRecord> newData;
+
+            if (oldData != null)
+            {
+                newData = data.Union(oldData).ToList();
+            }
+            else
+            {
+                newData = data;
+            }
+            
 
             Console.WriteLine($"Запись в файл \"{path}\"\n");
 
@@ -40,7 +55,9 @@ namespace EnglishBot
                 //Сериализуем 
                 using (var fs = new FileStream(path, FileMode.OpenOrCreate))
                 {
-                    formatter.Serialize(fs, data);
+                   
+                    formatter.Serialize(fs, newData);
+                    
                 }
             }
             catch (Exception ex)
