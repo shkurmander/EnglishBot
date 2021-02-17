@@ -166,14 +166,15 @@ namespace EnglishBot
 
         //}
 
-        public async Task TrainingDialog(Conversation chat)
+        public async Task TrainingDialog(Conversation chat, string message)
         {
-            TrainingConfig options;
+            var options = chat.GetTrainingOptions();
             switch (chat.GetDialogState())
             {
                 case "Active":
                     options = new TrainingConfig(true, false, true, ""); // TODO сделать метод ввода параметров тренировки
                     chat.SetTrainingOptions(options);
+                    chat.SetTrainingWord(chat.trainingVocabulary.)
                     if(options.IsRuToEN())
                     {
                         chat.ChangeDialogState("TrainingRu");
@@ -181,13 +182,21 @@ namespace EnglishBot
                     }
                     chat.ChangeDialogState("");
                     break;
-                case "EnglishWord":
+                case "TrainingRu":
+                    if (options.IsRuToEN()) // если тренировка с русского на английский
+                    {                        
+                        await SendText(chat, "Введите категорию(тематику) слова:");
+
+                    }
                     tempWord.Word = message;
                     chat.ChangeDialogState("Translation");
                     await SendText(chat, "Введите перевод слова:");
                     break;
-                case "Translation":
-                    tempWord.Translation = message;
+                case "TrainingEN":
+                    if(options.IsRuToEN()) // если тренировка с русского на английский
+                    {
+                        await SendText(chat, "Введите категорию(тематику) слова:");
+                    }    
                     chat.ChangeDialogState("Category");
                     await SendText(chat, "Введите категорию(тематику) слова:");
                     break;

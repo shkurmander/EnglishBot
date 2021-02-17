@@ -39,7 +39,7 @@ namespace EnglishBot
 
                 case "Начать тренировку":
                     chat.StartDialog();
-                    await messenger.TrainingDialog(chat);
+                    await messenger.TrainingDialog(chat, chat.GetLastMessage());
                     break;
                 case "Запланировать тренировку":
             

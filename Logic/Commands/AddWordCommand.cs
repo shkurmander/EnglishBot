@@ -7,10 +7,9 @@ namespace EnglishBot
     public class AddWordCommand : AbstractCommand, IChatTextResponse
     {
         private Conversation chat;
-        public AddWordCommand(Conversation conversation)
+        public AddWordCommand()
         {
-            CommandText = "/addword";
-            chat = conversation;
+            CommandText = "/addword";           
         }
       
         public string ReturnText()

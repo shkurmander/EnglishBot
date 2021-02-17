@@ -9,12 +9,12 @@ namespace EnglishBot
     {
         private Chat telegramChat;
 
-        private List<Message> telegramMessages;
-        private StateMachine stateMachine;
+        private List<Message> telegramMessages; //список сообщений чата
+        private StateMachine stateMachine;      //машина состояний диалога
         
         public List<WordRecord> vocabulary; //TODO сменить модификатор доступа
-        public List<WordRecord> tempVocabulary;
-        public List<WordRecord> trainingVocabulary;
+        public List<WordRecord> tempVocabulary; //временный словарь
+        public List<WordRecord> trainingVocabulary; //словарь для тренировки
 
 
         public Conversation(Chat chat)
@@ -133,5 +133,10 @@ namespace EnglishBot
             }
             return tempList;
         }
+
+        public WordRecord GetTrainingWord() => stateMachine.GetTempWord();
+
+        public void SetTrainingWord(WordRecord word) => stateMachine.SetTempWord(word);
+
     }
 }

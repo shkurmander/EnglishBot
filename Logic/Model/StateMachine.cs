@@ -17,6 +17,8 @@ namespace EnglishBot
 
 
         private TrainingConfig config;
+        private WordRecord tempWord;
+
         private State currentState { get; set; }
              
 
@@ -84,6 +86,16 @@ namespace EnglishBot
         /// </summary>
         /// <returns></returns>
         public TrainingConfig GetTraningConfig() => config;
+        /// <summary>
+        /// Возвращает тренировочное слово
+        /// </summary>
+        /// <returns></returns>
+        public WordRecord GetTempWord() => tempWord;
+        /// <summary>
+        /// Устанавливает тренировочное слово
+        /// </summary>
+        /// <param name="word"></param>
+        public void SetTempWord(WordRecord word) { tempWord = word; }
 
 
     }
