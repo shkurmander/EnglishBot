@@ -14,6 +14,7 @@ namespace EnglishBot
         
         public List<WordRecord> vocabulary; //TODO сменить модификатор доступа
         public List<WordRecord> tempVocabulary;
+        public List<WordRecord> trainingVocabulary;
 
 
         public Conversation(Chat chat)
@@ -99,6 +100,38 @@ namespace EnglishBot
                 Console.WriteLine("Словарь еще не создан!");
 
         }
-
+        public TrainingConfig GetTrainingOptions() => stateMachine.GetTraningConfig();
+        
+        /// <summary>
+        /// Задает параметры тренировки, а также формирует словарь для тренировки
+        /// в зависимости от типа тренировки
+        /// </summary>
+        /// <param name="options">объект конфига тренировки</param>
+        public void SetTrainingOptions(TrainingConfig options)
+        { 
+            stateMachine.SetTraningConfig(options);
+            if (!options.IsThematic())
+            {
+                VocabularyReadFromFile();
+                trainingVocabulary = tempVocabulary;
+            }
+            else
+                trainingVocabulary = GetThemacticWords(options.GetThematic());
+        }
+        /// <summary>
+        /// Возвращает выборку слов по заданной тематике из словаря пользователя
+        /// </summary>
+        /// <param name="request"> Тематика </param>
+        /// <returns></returns>
+        private List<WordRecord> GetThemacticWords(string request)
+        {
+            var tempList = new List<WordRecord>();
+            foreach (var item in tempVocabulary)
+            {
+                if (request == item.Category)
+                    tempList.Add(item);
+            }
+            return tempList;
+        }
     }
 }

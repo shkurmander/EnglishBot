@@ -11,11 +11,13 @@ namespace EnglishBot
     {
         ITelegramBotClient botClient;
         Messenger messenger;
+        Conversation chat;
 
-        public TrainingButtonCommand(ITelegramBotClient botClient, Messenger msngr)
+        public TrainingButtonCommand(ITelegramBotClient botClient, Messenger msngr, Conversation chat)
         {
             this.botClient = botClient;
             messenger = msngr;
+            this.chat = chat;
             CommandText = "/training";
         }
 
@@ -27,31 +29,20 @@ namespace EnglishBot
 
         private async void Bot_Callback(object sender, CallbackQueryEventArgs e)
         {
-            var text = "";
 
-            
+
+            //var text = "";
+
+
             switch (e.CallbackQuery.Data)
             {
-                
+
                 case "Начать тренировку":
-                    text = @"На белой лестнице встретился один,
-                                На чёрной лестнице повстречал другого…
-                                Белое, чёрное, красное, зелёное –
-                                Вот и жизнь проходит, словно сон.
-                                Припев:
-                                Сон купца, сон купца –
-                                Словно старая мельница.
-                                Сон купца, сон купца
-                                Никуда не денется, ца-ца.";
+                    chat.StartDialog();
+                    await messenger.TrainingDialog(chat);
                     break;
                 case "Запланировать тренировку":
-                    text = @"Больше никогда,
-                            Не будет ничего
-                            Нихрена!
-                            Не произойдёт!
-                            Никогда!!!
-                            Ни тогда ни сейчас ни потом,
-                            Ничего всё фигня и отстой...";
+            
                     break;
                 default:
                     break;

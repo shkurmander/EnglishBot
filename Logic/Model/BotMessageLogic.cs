@@ -30,8 +30,7 @@ namespace EnglishBot
         {
             parser.AddCommand(new SayHiCommand());
             parser.AddCommand(new AskMeCommand());
-            parser.AddCommand(new TrainingButtonCommand(this.botClient,this.messenger));
-            parser.AddCommand(new AddWordCommand());
+            parser.AddCommand(new TrainingButtonCommand(this.botClient,this.messenger));            
         }
 
         public async Task Response(MessageEventArgs e)
@@ -39,9 +38,9 @@ namespace EnglishBot
             var id = e.Message.Chat.Id;
             if (!chatList.ContainsKey(id))
             {
-                var newchat = new Conversation(e.Message.Chat);
+                var newchat = new Conversation(e.Message.Chat);                
                 chatList.Add(id, newchat);
-                
+                parser.AddCommand(new AddWordCommand(newchat));
             }
 
             var chat = chatList[id];
@@ -50,8 +49,8 @@ namespace EnglishBot
             //    messenger.SendStartMessage(chat);
             //}
             chat.AddMessage(e.Message);
+            parser.AddCommand(new AddWordCommand(chat));
 
-            
             await SendMessage(chat);
         }
 
