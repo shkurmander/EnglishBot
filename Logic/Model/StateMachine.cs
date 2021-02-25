@@ -65,8 +65,7 @@ namespace EnglishBot
                     mainState = MainStates.TrainingDialog;
                     break;
                 case "Inactive":
-                    currentState = State.Inactive;
-                    mainState = MainStates.Inactive;
+                    currentState = State.Inactive;                    
                     break;
                 case "TrainingEn":
                     currentState = State.TrainingEn;
@@ -77,6 +76,16 @@ namespace EnglishBot
             }
             
         }
+        /// <summary>
+        /// Останавливает текущий диалог
+        /// </summary>
+        
+        public void StopDialog ()
+        {
+            mainState = MainStates.Inactive;
+            currentState = State.Inactive;
+        }
+
         /// <summary>
         /// Конструктор
         /// </summary>

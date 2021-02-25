@@ -38,7 +38,7 @@ namespace EnglishBot
             {
 
                 case "Начать тренировку":
-                    chat.ChangeDialogState("ActiveTraining");
+                    chat.ChangeDialogState("TrainingDialog");
                     await messenger.TrainingDialog(chat, chat.GetLastMessage());
                     break;
                 case "Запланировать тренировку":

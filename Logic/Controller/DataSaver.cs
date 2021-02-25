@@ -34,7 +34,7 @@ namespace EnglishBot
         {
             BinaryFormatter formatter = new BinaryFormatter();
 
-            var oldData = DataSaver<List<WordRecord>>.BinaryDataRead(path);
+            List<WordRecord> oldData = DataSaver<List<WordRecord>>.BinaryDataRead(path);
 
             List<WordRecord> newData;
 
@@ -53,7 +53,7 @@ namespace EnglishBot
             try
             {
                 //Сериализуем 
-                using (var fs = new FileStream(path, FileMode.OpenOrCreate))
+                using (var fs = new FileStream(path, FileMode.Create))
                 {
                    
                     formatter.Serialize(fs, newData);

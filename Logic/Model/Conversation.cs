@@ -55,7 +55,7 @@ namespace EnglishBot
         /// <summary>
         /// метод удаляет диалог
         /// </summary>     
-        public void StopDialog() => stateMachine.SetState("Inactive");
+        public void StopDialog() => stateMachine.StopDialog();
 
         /// <summary>
         /// метод задает состояние диалога

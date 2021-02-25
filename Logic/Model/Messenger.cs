@@ -74,17 +74,25 @@ namespace EnglishBot
             if (parser.IsMessageCommand(lastmessage))
             {
 
-                //если сообщение команда, проверяем что команда /addword, если да то начинаем новый диалог в чате.
-                if (lastmessage == "/addword")
+                //если сообщение команда, проверяем что команда /addword или /stop, если да то выполняеми логику иначе выполняем команду
+                switch (lastmessage)
                 {
-                    tempWord = new WordRecord();
-                    //chat.VocabularyReadFromFile();
-                    chat.ChangeDialogState("AddWordDialog");
-                    await ExecCommand(chat, lastmessage);
-                    await AddWordDialog(chat, lastmessage);
-                }
-                else
-                    await ExecCommand(chat, lastmessage);
+                    case "/addword":
+                        tempWord = new WordRecord();
+                        //chat.VocabularyReadFromFile();
+                        chat.ChangeDialogState("AddWordDialog");
+                        await ExecCommand(chat, lastmessage);
+                        await AddWordDialog(chat, lastmessage);
+                        break;
+                    case "/stop":
+                        chat.StopDialog();
+                        await ExecCommand(chat, lastmessage);                        
+                        break;
+                    default:
+                        await ExecCommand(chat, lastmessage);
+                        break;
+                }               
+                    
 
             }
             else
@@ -93,11 +101,12 @@ namespace EnglishBot
                 //если диалог активен передать управление в соответствующий метод
                 switch (chat.GetDialogState())
                 {
-                    case "ActiveAddword":
+                    case "AddWordDialog":
                         await AddWordDialog(chat, lastmessage);
                         break;
-                    case "ActiveTraining":
-                        await TrainingDialog(chat, lastmessage);
+                    case "TrainingDialog":
+                        //while(chat.GetDialogState()!="Inactive" || chat.trainingVocabulary.Count>0)
+                          await TrainingDialog(chat, lastmessage);
                         break;
                     default:
                         var text = CreateTextMessage();
@@ -111,6 +120,7 @@ namespace EnglishBot
                 //}
                 
             }
+            
         }
         /// <summary>
         /// Метод отрабатывает диалог по вводу данных для объекта WordRecord
@@ -152,10 +162,7 @@ namespace EnglishBot
                         {
                             await SendText(chat, CreateVocabularyRecordString(item));
                         }
-                    }
-                    
-                    
-
+                    }                                      
                     await SendText(chat, CreateTextMessage());
                     break;
                 
@@ -254,7 +261,7 @@ namespace EnglishBot
                         var text = "Неверно - правильный ответ: " + chat.GetTrainingWord().Word;
                         await SendText(chat, text);
                     }
-                    chat.StopDialog();
+                    chat.ChangeDialogState("Inactive");
                     break;
                 case "TrainingEN":
                     if (message.ToLower() == chat.GetTrainingWord().Translation.ToLower())
@@ -266,30 +273,8 @@ namespace EnglishBot
                         var text = "Неверно - правильный ответ: " + chat.GetTrainingWord().Translation;
                         await SendText(chat, text);
                     }
-                    chat.StopDialog();
-                    break;
-                case "Category":
-                    tempWord.Category = message;
-                    chat.VocabularyAddRecord(tempWord);
-                    chat.StopDialog();
-                    chat.VocabularySaveToFile();
-                    await SendText(chat, $"В словарь добавлена запись:\n{tempWord.Word}\nПеревод: {tempWord.Translation}" +
-                        $"\nТематика: {tempWord.Category}");
-                    await SendText(chat, "Содержимое словаря:");
-
-                    chat.VocabularyReadFromFile();
-                    if (chat.tempVocabulary != null)
-                    {
-                        foreach (var item in chat.tempVocabulary)
-                        {
-                            await SendText(chat, CreateVocabularyRecordString(item));
-                        }
-                    }
-
-
-
-                    await SendText(chat, CreateTextMessage());
-                    break;
+                    chat.ChangeDialogState("Inactive");
+                    break;               
 
             }
 
@@ -334,7 +319,8 @@ namespace EnglishBot
             var text = "Команды бота:\n" +
                        "/sayhi  - приветствие\n" +
                        "/askme  - вопрос от бота\n" +
-                       "/training - спеть песню\n" +
+                       "/training - Тренировка\n" +
+                       "/stop - остановить тренировку\n"+
                        "/addword - добавить слово в словарь";                        
 
             return text;
@@ -346,7 +332,7 @@ namespace EnglishBot
         /// <returns></returns>
         private string CreateVocabularyRecordString(WordRecord data)
         {
-            var text = $"В {data.Word}\nПеревод: {data.Translation}" +
+            var text = $"{data.Word}\nПеревод: {data.Translation}" +
                         $"\nТематика: {data.Category}";
 
             return text;
