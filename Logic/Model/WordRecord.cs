@@ -13,7 +13,11 @@ namespace EnglishBot
     {
         internal string Word { get; set; }
         internal string Translation { get; set; }
-        internal string Category { get; set; }       
+        internal string Category { get; set; }
+        public WordRecord()
+        {
+
+        }
         public WordRecord(string word, string translation, string category)
         {
             Word = word;
@@ -25,8 +29,8 @@ namespace EnglishBot
         /// </summary>
         /// <returns></returns>
         public override int GetHashCode()
-        {
-            return (Word == null ? 0 : Word.GetHashCode()) ^ (Translation == null ? 0 : Translation.GetHashCode());
+        {            
+            return HashCode.Combine<string, string>(Word, Translation);
         }
         /// <summary>
         /// Определяет правило сравнения объекта WordRecord с другим объектом WordRecord
@@ -35,6 +39,10 @@ namespace EnglishBot
         /// <returns></returns>
         public bool Equals(WordRecord wordrecord)
         {
+            if (wordrecord == null)
+            {
+                return false;
+            }
             return Word == wordrecord.Word && Translation == wordrecord.Translation;
         }
 
