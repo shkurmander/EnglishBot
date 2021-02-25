@@ -10,6 +10,7 @@ namespace EnglishBot
         private bool trainingThematic = false;
         private bool trainingRuToEnglish = false;
         private string thematic = "";
+        private int step;
 
         public TrainingConfig(bool isActive, bool isThematic, bool direction, string thematic)
         {
@@ -17,6 +18,7 @@ namespace EnglishBot
             trainingThematic = isThematic;
             trainingRuToEnglish = direction;
             this.thematic = thematic;
+            step = 1;
         }
         public TrainingConfig()
         {
@@ -40,9 +42,17 @@ namespace EnglishBot
         { 
             return thematic; 
         }
-	
+        public int GetStep()
+        {
+            return step;
+        }
+        public void NextStep()
+        {
+            step++;
+        }
 
-	}
+
+    }
 
 
     

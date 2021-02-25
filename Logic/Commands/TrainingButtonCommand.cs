@@ -38,7 +38,7 @@ namespace EnglishBot
             {
 
                 case "Начать тренировку":
-                    chat.StartDialog();
+                    chat.ChangeDialogState("ActiveTraining");
                     await messenger.TrainingDialog(chat, chat.GetLastMessage());
                     break;
                 case "Запланировать тренировку":
@@ -48,8 +48,8 @@ namespace EnglishBot
                     break;
             }
 
-            await botClient.SendTextMessageAsync(e.CallbackQuery.Message.Chat.Id, text);
-            await botClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id);
+            //await botClient.SendTextMessageAsync(e.CallbackQuery.Message.Chat.Id, text);
+            //await botClient.AnswerCallbackQueryAsync(e.CallbackQuery.Id);
         }
 
         public InlineKeyboardMarkup ReturnKeyBoard()

@@ -51,7 +51,7 @@ namespace EnglishBot
         /// <summary>
         /// метод создает новый диалог
         /// </summary>
-        public void StartDialog() => stateMachine.SetState("Active");
+        //public void StartDialog() => stateMachine.SetState("Active");
         /// <summary>
         /// метод удаляет диалог
         /// </summary>     
@@ -63,10 +63,15 @@ namespace EnglishBot
         /// <param name="state"></param>
         public void ChangeDialogState(string state) => stateMachine.SetState(state);
         /// <summary>
-        /// метод отдает состояние диалога
+        /// метод отдает главное состояние диалога
         /// </summary>
         /// <returns></returns>
-        public string GetDialogState() => stateMachine.GetState();
+        public string GetDialogState() => stateMachine.GetMainState();
+        /// <summary>
+        /// метод отдает внутреннее состояние диалога
+        /// </summary>
+        /// <returns></returns>
+        public string GetDialogInnerState() => stateMachine.GetCurrentState();
         /// <summary>
         /// метод добавляет новую запись в словарь
         /// </summary>
@@ -118,6 +123,10 @@ namespace EnglishBot
             else
                 trainingVocabulary = GetThemacticWords(options.GetThematic());
         }
+        /// <summary>
+        /// Переход к следующему шагу тренировки
+        /// </summary>
+        public void TrainingGoNext() => stateMachine.NextStep();
         /// <summary>
         /// Возвращает выборку слов по заданной тематике из словаря пользователя
         /// </summary>

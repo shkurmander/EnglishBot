@@ -7,23 +7,44 @@ namespace EnglishBot
 {
     public class StateMachine
     {
-
+        /// <summary>
+        /// Состояния активных диалогов
+        /// </summary>
         public enum State
         {
-            Active, Inactive, 
+            Inactive,
             EnglishWord, Translation, Category,
             TrainingEn, TrainingRu
         }
-
+        /// <summary>
+        /// Типы диалогов
+        /// </summary>
+        public enum MainStates
+        {
+            Inactive, AddWordDialog, TrainingDialog
+            
+        }
 
         private TrainingConfig config;
+        /// <summary>
+        /// текущая запись для тренировки из словаря 
+        /// </summary>
         private WordRecord tempWord;
 
-        private State currentState { get; set; }
-             
+        /// <summary>
+        /// Внутреннее состояние активного диалога
+        /// </summary>
+        private State currentState;
+        /// <summary>
+        /// Тип текущего диалога
+        /// </summary>
+        private MainStates mainState;
 
 
-
+        /// <summary>
+        /// Устанавливает внутреннее состояние активного диалога
+        /// </summary>
+        /// <param name="state"></param>
         public void SetState(string state)
         {            
             switch (state)
@@ -37,11 +58,15 @@ namespace EnglishBot
                 case "Category":
                     currentState = State.Category;
                     break;
+                case "AddWordDialog":
+                    mainState = MainStates.AddWordDialog;
+                    break;
+                case "TrainingDialog":
+                    mainState = MainStates.TrainingDialog;
+                    break;
                 case "Inactive":
                     currentState = State.Inactive;
-                    break;
-                case "Active":
-                    currentState = State.Active;
+                    mainState = MainStates.Inactive;
                     break;
                 case "TrainingEn":
                     currentState = State.TrainingEn;
@@ -50,28 +75,35 @@ namespace EnglishBot
                     currentState = State.TrainingRu;
                     break;
             }
-            // логика по-умолчанию для установленного состояния( еще хз пригодится или нет)
-            //switch (currentState)
-            //{
-            //    case State.Inactive:
-            //        break;
-            //    case State.EnglishWord:
-            //        break;
-            //    case State.Translation:
-            //        break;
-            //    case State.Category:
-            //        break;
-            //}
+            
         }
+        /// <summary>
+        /// Конструктор
+        /// </summary>
         public StateMachine()
         {
+            mainState = MainStates.Inactive;
             currentState = State.Inactive;
         }
 
-        public string GetState()
+        /// <summary>
+        /// Возвращает тип текущего диалога
+        /// </summary>
+        /// <returns></returns>
+        public string GetMainState()
+        {
+            return mainState.ToString();
+        }
+
+        /// <summary>
+        /// Возвращает внутреннее состояние активного диалога
+        /// </summary>
+        /// <returns></returns>
+        public string GetCurrentState()
         {
             return currentState.ToString();
         }
+
         /// <summary>
         /// Устанавливает конфиг тренировки
         /// </summary>
@@ -94,8 +126,13 @@ namespace EnglishBot
         /// <summary>
         /// Устанавливает тренировочное слово
         /// </summary>
-        /// <param name="word"></param>
+        /// <param name="word"></param>       
+
         public void SetTempWord(WordRecord word) { tempWord = word; }
+
+        //хз возможно убрать
+        public void NextStep() { config.NextStep(); }
+        
 
 
     }
