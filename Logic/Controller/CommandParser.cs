@@ -13,6 +13,15 @@ namespace EnglishBot
         {
             Command = new List<IChatResponse>();
         }
+        public bool IsAdded(IChatResponse chatCommand)
+        {
+            if (Command.Contains(chatCommand))
+            {
+                return true;
+            }
+            else
+                return false;
+        }
 
         public void AddCommand(IChatResponse chatCommand)
         {

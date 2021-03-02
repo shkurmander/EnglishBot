@@ -13,7 +13,7 @@ namespace EnglishBot
         private Messenger messenger;
         private CommandParser parser;
         private ITelegramBotClient botClient;
-
+        private bool activeDialog = false;
         private Dictionary<long, Conversation> chatList;
               
 
@@ -41,8 +41,9 @@ namespace EnglishBot
             {
                 var newchat = new Conversation(e.Message.Chat);                
                 chatList.Add(id, newchat);
-                parser.AddCommand(new TrainingButtonCommand(this.botClient, this.messenger, newchat));
-            }
+                
+            parser.AddCommand(new TrainingButtonCommand(this.botClient, this.messenger, newchat));
+        }
 
             var chat = chatList[id];
             //if (chat.GetTextMessages().Count == 0)
@@ -50,7 +51,12 @@ namespace EnglishBot
             //    messenger.SendStartMessage(chat);
             //}
             chat.AddMessage(e.Message);
-            parser.AddCommand(new TrainingButtonCommand(this.botClient, this.messenger, chat));
+            //Проверяем добавлялась ли команда в парсер ранее, если нет(не было ) добавляем.
+            if (!parser.IsAdded(new TrainingButtonCommand(this.botClient, this.messenger, chat)))
+            {
+                parser.AddCommand(new TrainingButtonCommand(this.botClient, this.messenger, chat));
+            }
+           
 
             await SendMessage(chat);
         }
@@ -58,10 +64,11 @@ namespace EnglishBot
 
         private async Task SendMessage(Conversation chat)
         {
-            await messenger.MakeAnswer(chat);
+            activeDialog = await messenger.MakeAnswer(chat);
 
         }
 
+        public bool CheckActiveDialog() => activeDialog;        
     
 
 

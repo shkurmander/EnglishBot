@@ -14,7 +14,7 @@ namespace EnglishBot
         {
             Inactive,
             EnglishWord, Translation, Category,
-            TrainingEn, TrainingRu
+            TrainingEn, TrainingRu, NextWord
         }
         /// <summary>
         /// Типы диалогов
@@ -72,6 +72,9 @@ namespace EnglishBot
                     break;
                 case "TrainingRu":
                     currentState = State.TrainingRu;
+                    break;
+                case "NextWord":
+                    currentState = State.NextWord;
                     break;
             }
             

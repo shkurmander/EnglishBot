@@ -28,6 +28,10 @@ namespace EnglishBot
         {
             botClient.StopReceiving();
         }
+        public void PlayDialog()
+        {
+
+        }
 
         private async void Bot_OnMessage(object sender, MessageEventArgs e)
         {
@@ -35,6 +39,10 @@ namespace EnglishBot
             {
                 Console.WriteLine($"Получено сообщение в чате: {e.Message.Chat.Id}.");
                 await logic.Response(e);
+                while (logic.CheckActiveDialog())
+                {
+                    await logic.Response(e);
+                }
             }
         }
 
