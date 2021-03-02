@@ -21,8 +21,8 @@ namespace EnglishBot
         /// </summary>
         public enum MainStates
         {
-            Inactive, AddWordDialog, TrainingDialog
-            
+            Inactive, AddWordDialog, TrainingDialog, UserRequest
+
         }
 
         private TrainingConfig config;
@@ -75,6 +75,9 @@ namespace EnglishBot
                     break;
                 case "NextWord":
                     currentState = State.NextWord;
+                    break;
+                case "UserRequest":
+                    mainState = MainStates.UserRequest;
                     break;
             }
             

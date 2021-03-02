@@ -66,6 +66,7 @@ namespace EnglishBot
         {
             activeDialog = await messenger.MakeAnswer(chat);
 
+
         }
 
         public bool CheckActiveDialog() => activeDialog;        

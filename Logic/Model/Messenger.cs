@@ -33,44 +33,7 @@ namespace EnglishBot
         public async Task<bool> MakeAnswer(Conversation chat)
         {
             var lastmessage = chat.GetLastMessage();
-            // Если есть активный диалог, передаем управление в метод AddWordDialog
-
-            //if (chat.GetDialogState() != "Inactive")
-            //{
-
-            //    await AddWordDialog(chat, lastmessage);
-            //}
-            //else
-            //{
-            //    if (parser.IsMessageCommand(lastmessage))
-            //    {
-
-            //        //если сообщение команда, проверяем что команда /addword, если да то начинаем новый диалог в чате.
-            //        if (lastmessage == "/addword")
-            //        {
-            //            tempWord = new WordRecord();
-            //            //chat.VocabularyReadFromFile();
-            //            chat.ChangeDialogState("ActiveAddWord");
-            //            await ExecCommand(chat, lastmessage);
-            //            await AddWordDialog(chat, lastmessage);
-            //        }
-            //        else
-            //            await ExecCommand(chat, lastmessage);
-
-            //    }
-            //    else
-            //    {
-            //        //если сообщение не команда, надо проверить состояние есть ли активный диалог?
-            //        //если диалог активен передать управление в метод AddWordDialog()
-            //        if (chat.GetDialogState() != "Inactive")
-            //        {
-            //            await AddWordDialog(chat, lastmessage);
-            //        }
-            //        var text = CreateTextMessage();
-
-            //        await SendText(chat, text);
-            //    }
-            //}
+      
             if (parser.IsMessageCommand(lastmessage) && chat.GetDialogState()=="Inactive")
             {
 
@@ -104,23 +67,27 @@ namespace EnglishBot
                     case "AddWordDialog":
                         await AddWordDialog(chat, lastmessage);
                         break;
-                    case "TrainingDialog":
-                        //while(chat.GetDialogState()!="Inactive" || chat.trainingVocabulary.Count>0)
+                    case "TrainingDialog":                        
                           await TrainingDialog(chat, lastmessage);
+                        break;
+                    case "UserRequest":                        
+                        
+                        if (chat.GetTrainingOptions().IsRuToEN())
+                            chat.ChangeDialogState("TrainingRu");
+                        else
+                            chat.ChangeDialogState("TrainingRu");
+
+                        await TrainingDialog(chat, lastmessage);
                         break;
                     default:
                         var text = CreateTextMessage();
                         await SendText(chat, text);
                         break;
                 }
-
-                //if (chat.GetDialogState() != "Inactive")
-                //{
-                //    await AddWordDialog(chat, lastmessage);
-                //}
+                               
                 
             }
-            return chat.GetDialogState() != "Inactive";
+            return chat.GetDialogState() == "UserRequest";
             
         }
         /// <summary>
@@ -233,33 +200,8 @@ namespace EnglishBot
                     options = new TrainingConfig(true, false, true, ""); // TODO сделать метод ввода параметров тренировки
                     //Задаем параметры тренировки
                     chat.SetTrainingOptions(options);
-                    if (chat.trainingVocabulary.Count < 1)
-                    {
-                        await SendText(chat, "В словаре больше нет слов.");
-                        chat.StopDialog();
-                        break;
-                    }
-                    //Читаем первую запись из тренировочного словаря, пишем ее в темп и удаляем из словаря
-                    chat.SetTrainingWord(chat.trainingVocabulary[0]);
-                    chat.trainingVocabulary.RemoveAt(0);
-
-                    if (options.IsRuToEN())
-                    {
-                        //chat.ChangeDialogState("TrainingRu");
-                        //var text = "Переведите на английский:\n" + chat.GetTrainingWord().Translation;
-                        //await SendText(chat, text);
-                        //chat.TrainingGoNext();
-                        await StartRuQuest();
-                    }
-                    else
-                    {
-                        //var text = "Переведите на русский:\n" + chat.GetTrainingWord().Word;
-                        //await SendText(chat, text);
-                        //chat.ChangeDialogState("TrainingEn");
-                        //chat.TrainingGoNext();
-                        await StartEnQuest();
-                    } 
-                    //chat.ChangeDialogState("");
+                    chat.ChangeDialogState("NextWord");
+                    
                     break;
 
                 case "TrainingRu":
@@ -289,33 +231,38 @@ namespace EnglishBot
                     break;
 
                 case "NextWord":
-                    if (message.ToLower() == chat.GetTrainingWord().Translation.ToLower())
+                    if (chat.trainingVocabulary.Count < 1)
                     {
-                        await SendText(chat, "Верно!");
+                        await SendText(chat, "В словаре больше нет слов.");
+                        chat.StopDialog();
+                        break;
                     }
+                    //Читаем первую запись из тренировочного словаря, пишем ее в темп и удаляем из словаря
+                    chat.SetTrainingWord(chat.trainingVocabulary[0]);
+                    chat.trainingVocabulary.RemoveAt(0);
+                    
+                    if (chat.GetTrainingOptions().IsRuToEN())
+                        await StartRuQuest();
                     else
-                    {
-                        var text = "Неверно - правильный ответ: " + chat.GetTrainingWord().Translation;
-                        await SendText(chat, text);
-                    }
-                    chat.ChangeDialogState("NextWord");
+                        await StartEnQuest();
 
-                    break;               
+                    break;
+                                   
 
             }
             async Task StartRuQuest()
             {
-                chat.ChangeDialogState("TrainingRu");
+                chat.ChangeDialogState("UserRequest");
                 var text = "Переведите на английский:\n" + chat.GetTrainingWord().Translation;
                 await SendText(chat, text);
-                chat.TrainingGoNext();
+               // chat.TrainingGoNext();
             }
             async Task StartEnQuest()
             {
                 var text = "Переведите на русский:\n" + chat.GetTrainingWord().Word;
                 await SendText(chat, text);
-                chat.ChangeDialogState("TrainingEn");
-                chat.TrainingGoNext();
+                chat.ChangeDialogState(" UserRequest");
+                //chat.TrainingGoNext();
             }
 
         }
